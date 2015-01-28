@@ -14,7 +14,7 @@ The basic usage pattern looks like this: `pw <apiMethod> "selector" [field]*`
 
 * `pw`: maps to the name of the main file in this repository (required).
 * `<apiMethod>`: a ProcessWire API method like `get` or `find` (required).
-* `"selector"`: a [ProcessWire selector](https://processwire.com/api/selectors/) like `"template=basic-page,children.count>5, limit=3"` (required).
+* `"selector"`: a [ProcessWire selector](https://processwire.com/api/selectors/) like `"template=basic-page,children.count>5,limit=3"` (required).
 * `[field]*`: custom fields you want to output (optional).
 
 ## Usage examples
