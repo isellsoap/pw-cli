@@ -88,11 +88,12 @@ $findLimit = 100;
 
 if ($apiMethod == null) {
   $out .= "You have to supply an API method.";
-  echo $out .= "\n";
+  $out .= "\n";
+  echo $out;
   return;
 }
 
-if ($selector == null) {
+if ($selector == null && $apiMethod != "help") {
   $out .= "You have to supply a selector.";
   $out .= "\n";
   echo $out;
@@ -144,6 +145,19 @@ switch ($apiMethod) {
       }
     }
     $out .= colorize("==============================================");
+    $out .= "\n";
+    break;
+
+  case "help":
+    $out .= "Usage: pw <apiMethod> \"selector\" [field]*";
+    $out .= "\n";
+    $out .= "Use pw help to open this prompt.";
+    $out .= "\n";
+    $out .= "Available API methods:";
+    $out .= "\n";
+    $out .= "get" . "\t" . "http://cheatsheet.processwire.com/pages/built-in-methods-reference/pages-get-selector/";
+    $out .= "\n";
+    $out .= "find" . "\t" . "http://cheatsheet.processwire.com/pages/built-in-methods-reference/pages-find-selector/";
     $out .= "\n";
     break;
   default:
