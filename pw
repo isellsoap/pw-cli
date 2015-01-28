@@ -1,0 +1,153 @@
+#!/usr/bin/php
+
+<?php
+
+include("/path/to/processwire/index.php"); 
+
+$out = "";
+
+/**
+ * step through every field that the user specified
+ */
+function showUserSpecifiedFields($page, $argv) {
+  $result = "";
+
+  for ($i = 3; $i < count($argv); $i++) {
+    $field = $argv[$i];
+    $result .= colorize($field . ": ") . $page->$field . "\n";
+  }
+
+  return $result;
+}
+
+/**
+ * standard output when no custom fields were passed
+ */
+function standardPageFieldsToRender($page) {
+  $createdUser = $page->createdUser;
+  $modifiedUser = $page->modifiedUser;
+  $created = $page->created;
+
+  $result = "";
+
+  $result .= colorize("id: ") . $page->id . "\n";
+  $result .= colorize("name: ") . $page->name . "\n";
+  $result .= colorize("path: ") . $page->path . "\n";
+  $result .= colorize("template: ") . $page->template . "\n";
+
+  $result .= "\n";
+
+  $result .= colorize("parent id: ") . $page->parent->id . "\n";
+  $result .= colorize("rootParent id: ") . $page->rootParent . "\n";
+  $result .= colorize("children id(s): ") . $page->children . "\n";
+
+  $result .= "\n";
+
+  $result .= colorize("created: ") . date('Y-m-d H:i:s', $page->created) . " (" . wireRelativeTimeStr($created) . ")" . "\n";
+  $result .= colorize("created by: ") . $createdUser->name . " (" . colorize("id: ") . $createdUser . ")" ."\n";
+
+  $result .= "\n";
+
+  $result .= colorize("last modified: ") . date('Y-m-d H:i:s', $page->modified) . " (" . wireRelativeTimeStr($created) . ")" . "\n";
+  $result .= colorize("last modified by: ") . $modifiedUser->name . " (" . colorize("id: ") . $modifiedUser . ")" ."\n";
+
+  $result .= "\n";
+
+  // all template fields of the page
+  foreach ($page->fields as $field) {
+    $result .= colorize($field->name . ": ") . $page->$field . "\n";
+  }
+
+  $result .= "\n";
+
+  return $result;
+}
+
+/**
+ * colorize string for better readability
+ */
+function colorize($str, $color) {
+  return "\e[1;34m" . $str . "\033[0m";
+}
+
+/**
+ * CLI parameters
+ */
+$apiMethod = $argv[1];
+$selector = $argv[2];
+$fieldsToShow = $argv[3];
+
+/**
+ * variables
+ */
+$findLimit = 100;
+
+/**
+ * error handling
+ */
+
+if ($apiMethod == null) {
+  $out .= "You have to supply an API method.";
+  echo $out .= "\n";
+  return;
+}
+
+if ($selector == null) {
+  $out .= "You have to supply a selector.";
+  $out .= "\n";
+  echo $out;
+  return;
+}
+
+/**
+ * switching through first given parameter
+ */
+
+switch ($apiMethod) {
+
+  case "get":
+    $page = $wire->pages->get($selector);
+
+    if (!$page->id) {
+      $out .= "Selector didn't match any page.";
+      $out .= "\n";
+      echo $out;
+      return;
+    }
+
+    if ($fieldsToShow != null) {
+      $out .= showUserSpecifiedFields($page, $argv);
+    } else {
+      $out .= standardPageFieldsToRender($page, $argv);
+    }
+
+    break;
+
+  case "find":
+    $matchedPages = $wire->pages->find("limit=" . $findLimit . "," . $selector);
+
+    if (count($matchedPages) < 1) {
+      $out .= "Selector didn't match any page.";
+      $out .= "\n";
+      echo $out;
+      return;
+    }
+
+    foreach ($matchedPages as $match) {
+      $out .= colorize("==============================================");
+      $out .= "\n";
+
+      if ($fieldsToShow != null) {
+        $out .= showUserSpecifiedFields($match, $argv);
+      } else {
+        $out .= standardPageFieldsToRender($match, $argv);
+      }
+    }
+    $out .= colorize("==============================================");
+    $out .= "\n";
+    break;
+  default:
+    break;
+}
+
+echo $out;
