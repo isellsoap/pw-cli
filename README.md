@@ -25,5 +25,5 @@ The basic usage pattern looks like this: `pw <apiMethod> "selector" [field]*`
 
 ## Notes
 
-* For performance reasons pages output is limitted to 100. Adjust to your needs.
+* For performance reasons pages output is limitted to 100. Adjust to fit your needs.
 * When you don’t specify custom fields after the selector (aka the `[field]*` part) then a standard set of fields will be output.
