@@ -26,6 +26,7 @@ function showUserSpecifiedFields($page, $argv) {
 function standardPageFieldsToRender($page) {
   $createdUser = $page->createdUser;
   $modifiedUser = $page->modifiedUser;
+  $modified = $page->modified;
   $created = $page->created;
 
   $result = "";
@@ -43,12 +44,12 @@ function standardPageFieldsToRender($page) {
 
   $result .= "\n";
 
-  $result .= colorize("created: ") . date('Y-m-d H:i:s', $page->created) . " (" . wireRelativeTimeStr($created) . ")" . "\n";
+  $result .= colorize("created: ") . date('Y-m-d H:i:s', $created) . " (" . wireRelativeTimeStr($created) . ")" . "\n";
   $result .= colorize("created by: ") . $createdUser->name . " (" . colorize("id: ") . $createdUser . ")" ."\n";
 
   $result .= "\n";
 
-  $result .= colorize("last modified: ") . date('Y-m-d H:i:s', $page->modified) . " (" . wireRelativeTimeStr($created) . ")" . "\n";
+  $result .= colorize("last modified: ") . date('Y-m-d H:i:s', $modified) . " (" . wireRelativeTimeStr($modified) . ")" . "\n";
   $result .= colorize("last modified by: ") . $modifiedUser->name . " (" . colorize("id: ") . $modifiedUser . ")" ."\n";
 
   $result .= "\n";
