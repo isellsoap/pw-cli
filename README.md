@@ -4,7 +4,7 @@ A basic command line shell script for outputting informations about ProcessWire 
 
 ## Installation
 
-* [Include & Bootstrap](https://processwire.com/api/include/) on the ProcessWire website.
+* Follow the instructions from [Include & Bootstrap](https://processwire.com/api/include/) on the ProcessWire website.
 * Edit `#!/usr/bin/php` to match your local dev setting.
 * Edit the path in `include("/path/to/processwire/index.php");` to match your ProcessWire location.
 
